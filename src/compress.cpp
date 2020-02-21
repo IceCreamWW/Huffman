@@ -23,28 +23,45 @@
 void pseudoCompression(string inFileName, string outFileName) {
     vector<unsigned int> freqs(ASCII_MAX);
 
-    fstream fin(inFileName, fstream::in);
+    ifstream inFile(inFileName, ios::binary);
 
-    char ch;
-    while (fin.get(ch)) freqs[ch]++;
-    fin.close();
+    byte ch;
+    while (true) {
+        inFile.read(reinterpret_cast<char*>(&ch), sizeof(ch));
+        if (inFile.eof()) break;
+        freqs[ch]++;
+    }
 
     auto tree = HCTree();
     tree.build(freqs);
 
-    fstream fout(outFileName, fstream::out);
-    for (int i = 0; i < ASCII_MAX; ++i) fout << freqs[i] << endl;
+    ofstream outFile(outFileName);
 
-    fin.open(inFileName, fstream::in);
-    while (fin.get(ch)) tree.encode(ch, fout);
-    fin.close();
-    fout.close();
+    /* write freqs */
+    for (int i = 0; i < ASCII_MAX; ++i) outFile << freqs[i] << endl;
+
+    /* write encoded file */
+    inFile.clear();
+    inFile.seekg(0, ios::beg);
+    while (true) {
+        inFile.read(reinterpret_cast<char*>(&ch), sizeof(ch));
+        if (inFile.eof()) break;
+        tree.encode(ch, outFile);
+    }
+    inFile.close();
+    outFile.close();
 }
 
 /* True compression with bitwise i/o and small header (final) */
 void trueCompression(string inFileName, string outFileName) {
-    ifstream inFile(inFileName, ios::binary);
+
     ofstream outFile(outFileName, ios::binary);
+    if (FileUtils::isEmptyFile(inFileName)) {
+        outFile.close();
+        return;
+    }
+
+    ifstream inFile(inFileName, ios::binary);
     vector<unsigned int> freqs(ASCII_MAX);
 
     byte ch;

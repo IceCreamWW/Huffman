@@ -26,7 +26,6 @@ unsigned int BitInputStream::readBit() {
     }
     int bit = (buf[nbits / 8] >> (7 - nbits % 8) & 0x1);
     ++nbits;
-    if (nbits == bufSize * 8)
-        fill();
+    if (nbits == bufSize * 8) fill();
     return bit;
 }

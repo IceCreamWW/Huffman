@@ -24,38 +24,44 @@
  */
 void pseudoDecompression(string inFileName, string outFileName) {
     vector<unsigned int> freqs(ASCII_MAX);
-    fstream fin(inFileName, fstream::in);
+    ifstream inFile(inFileName);
 
     unsigned int freq;
     for (int i = 0; i < ASCII_MAX; ++i) {
-        fin >> freq;
+        inFile >> freq;
         freqs[i] = freq;
     }
 
     auto tree = HCTree();
     tree.build(freqs);
 
-    fstream fout(outFileName, fstream::out);
+    ofstream outFile(outFileName, ios::binary);
 
     char enter;
-    fin.get(enter);
-    while (!fin.eof()) {
-        byte code = tree.decode(fin);
-        if (fin.eof()) break;
-        fout << code;
+    inFile.get(enter);
+    while (!inFile.eof()) {
+        byte code = tree.decode(inFile);
+        if (inFile.eof()) break;
+        outFile.write(reinterpret_cast<char*>(&code), sizeof(code));
     }
-    fin.close();
-    fout.close();
+    inFile.close();
+    outFile.close();
 }
 
 /* True decompression with bitwise i/o and small header (final) */
 void trueDecompression(string inFileName, string outFileName) {
-    ifstream inFile(inFileName, ios::binary);
+
     ofstream outFile(outFileName, ios::binary);
+    if (FileUtils::isEmptyFile(inFileName)) {
+        outFile.close();
+        return;
+    } 
+
+    ifstream inFile(inFileName, ios::binary);
 
 
     // read size of original
-    unsigned long size;
+    unsigned long size = 0;
     inFile.read(reinterpret_cast<char *>(&size), sizeof(size));
 
     BitInputStream in(inFile, BUFSIZE);
@@ -67,8 +73,8 @@ void trueDecompression(string inFileName, string outFileName) {
         outFile.write(reinterpret_cast<char*>(&code), sizeof(code));
         --size;
     }
-    outFile.close();
     inFile.close();
+    outFile.close();
 }
 
 /* Main program that runs the uncompress */

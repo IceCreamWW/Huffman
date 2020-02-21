@@ -16,8 +16,7 @@ void HCTree::build(const vector<unsigned int>& freqs) {
     priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
     for (int i = 0; i < ASCII_MAX; ++i) {
         int freq = freqs.at(i);
-        if (freq == 0)
-            continue;
+        if (freq == 0) continue;
         auto node = new HCNode(freq, i);
         leaves[i] = node;
         pq.push(node);
