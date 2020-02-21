@@ -25,7 +25,7 @@ void HCTree::build(const vector<unsigned int>& freqs) {
 
     // fake a node if there is only one character in tree;
     if (pq.size() == 1)
-        pq.push(new HCNode(pq.top()->symbol, pq.top()->count + 1));
+        pq.push(new HCNode(pq.top()->count + 1, pq.top()->symbol));
 
     while (pq.size() >= 2) {
         HCNode* c0 = pq.top();

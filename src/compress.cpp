@@ -21,6 +21,13 @@
 /* add pseudo compression with ascii encoding and naive header
  * (checkpoint) */
 void pseudoCompression(string inFileName, string outFileName) {
+
+    ofstream outFile(outFileName, ios::binary);
+    if (FileUtils::isEmptyFile(inFileName)) {
+        outFile.close();
+        return;
+    }
+
     vector<unsigned int> freqs(ASCII_MAX);
 
     ifstream inFile(inFileName, ios::binary);
@@ -34,8 +41,6 @@ void pseudoCompression(string inFileName, string outFileName) {
 
     auto tree = HCTree();
     tree.build(freqs);
-
-    ofstream outFile(outFileName);
 
     /* write freqs */
     for (int i = 0; i < ASCII_MAX; ++i) outFile << freqs[i] << endl;

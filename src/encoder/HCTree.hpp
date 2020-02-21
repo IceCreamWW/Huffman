@@ -30,7 +30,7 @@ class HCTree {
 
   public:
     /* allocate space for leaves vector */
-    HCTree() { leaves.assign(ASCII_MAX, nullptr); }
+    HCTree() { root = 0; leaves.assign(ASCII_MAX, nullptr); }
 
     /* recursively free from root */
     ~HCTree();

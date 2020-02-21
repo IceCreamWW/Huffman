@@ -23,6 +23,13 @@
 /* Pseudo decompression with ascii encoding and naive header (checkpoint)
  */
 void pseudoDecompression(string inFileName, string outFileName) {
+
+    ofstream outFile(outFileName, ios::binary);
+    if (FileUtils::isEmptyFile(inFileName)) {
+        outFile.close();
+        return;
+    }
+
     vector<unsigned int> freqs(ASCII_MAX);
     ifstream inFile(inFileName);
 
@@ -35,7 +42,6 @@ void pseudoDecompression(string inFileName, string outFileName) {
     auto tree = HCTree();
     tree.build(freqs);
 
-    ofstream outFile(outFileName, ios::binary);
 
     char enter;
     inFile.get(enter);
