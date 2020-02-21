@@ -67,6 +67,8 @@ void trueDecompression(string inFileName, string outFileName) {
         outFile.write(reinterpret_cast<char*>(&code), sizeof(code));
         --size;
     }
+    outFile.close();
+    inFile.close();
 }
 
 /* Main program that runs the uncompress */
