@@ -6,6 +6,7 @@
 #include <vector>
 #include "BitInputStream.hpp"
 #include "BitOutputStream.hpp"
+#include "cstring"
 
 using namespace std;
 

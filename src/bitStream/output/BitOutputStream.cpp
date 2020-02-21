@@ -6,7 +6,7 @@
 #include "BitOutputStream.hpp"
 
 BitOutputStream::~BitOutputStream() {
-    free(buf);
+    delete[] buf;
 }
 
 void BitOutputStream::flush() {

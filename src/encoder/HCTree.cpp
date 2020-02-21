@@ -16,12 +16,11 @@ void HCTree::build(const vector<unsigned int>& freqs) {
     priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
     for (int i = 0; i < ASCII_MAX; ++i) {
         int freq = freqs.at(i);
-        auto node = new HCNode(freq, i);
-        leaves[i] = node;
         if (freq == 0)
             continue;
-        else
-            pq.push(node);
+        auto node = new HCNode(freq, i);
+        leaves[i] = node;
+        pq.push(node);
     }
     if (pq.empty()) return;
 
@@ -71,7 +70,7 @@ byte HCTree::decode(istream& in) const {
         node = (c == '0' ? node->c0 : node->c1);
         if (node->c0 == 0) return node->symbol;
     }
-    throw std::runtime_error("should never exec to this line");
+    return 0xFF;
 }
 
 void HCTree::genCode(HCNode* node, string in_code) {
@@ -87,7 +86,7 @@ void HCTree::freeNode(HCNode* node) {
         freeNode(node->c0);
         freeNode(node->c1);
     }
-    free(node);
+    delete node;
 }
 
 

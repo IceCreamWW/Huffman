@@ -6,7 +6,7 @@
 #include "BitInputStream.hpp"
 
 BitInputStream::~BitInputStream() {
-    free(buf);
+    delete[] buf;
 }
 
 void BitInputStream::fill() {

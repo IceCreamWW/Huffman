@@ -58,7 +58,6 @@ TEST_F(SimpleHCTreeFixture, TEST_ENCODE) {
     ASSERT_EQ(os.str(), "0");
 }
 
-
 TEST_F(SimpleHCTreeFixture, TEST_DECODE) {
     istringstream is("10");
     ASSERT_EQ(tree.decode(is), 'c');
@@ -70,4 +69,44 @@ TEST_F(SimpleHCTreeFixture, TEST_DECODE) {
     is.clear();
     is.str("0");
     ASSERT_EQ(tree.decode(is), 'b');
+}
+
+class WorkSheetHCTreeFixture : public ::testing::Test {
+  protected:
+    HCTree tree;
+
+  public:
+    WorkSheetHCTreeFixture() {
+        // initialization code here
+        vector<unsigned int> freqs(256);
+        freqs.assign(256, 0);
+        freqs['a'] = 3;
+        freqs['b'] = 5;
+        freqs['c'] = 4;
+        freqs['d'] = 26;
+        freqs['e'] = 12;
+        tree.build(freqs);
+    }
+};
+
+TEST_F(WorkSheetHCTreeFixture, TEST_ENCODE) {
+    ostringstream os;
+    tree.encode('a', os);
+    cout << "a: " << os.str() << endl;
+
+    os.str("");
+    tree.encode('b', os);
+    cout << "b: " << os.str() << endl;
+
+    os.str("");
+    tree.encode('c', os);
+    cout << "c: " << os.str() << endl;
+
+    os.str("");
+    tree.encode('d', os);
+    cout << "d: " << os.str() << endl;
+
+    os.str("");
+    tree.encode('e', os);
+    cout << "e: " << os.str() << endl;
 }
